@@ -1,0 +1,614 @@
+<HTML>
+<HEAD>
+<META NAME="GENERATOR" Content="Microsoft Visual Studio 6.0">
+<TITLE></TITLE>
+</HEAD>
+<BODY>
+<H1>ASPCanvas</H1>
+<P>Version 1.0.5 documentation (Sunday the&nbsp;23rd February, 2003)</P>
+<H2>     Table of contents</H2>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+<P>
+	<A href="#What is ASPCanvas?">What is ASPCanvas?</A><BR>
+	<A href="#How does it work?">How does it work?</A><BR>
+	<A href="#Requirements">Requirements</A><BR>
+	<A href="#Installation instructions">Installation instructions</A><BR>
+	<A href="#Usage">Usage</A><BR>
+	<A href="#Methods">Methods</A><BR>
+	<A href="#Properties">Properties</A><BR>
+	<A href="#Current limitations">Current limitations</A><BR>
+	<A href="#Sample code">Sample code</A><BR>
+	<A href="#How to include the image within HTML">How to include the image within HTML</A><BR>
+	<A href="#UNISYS and GIF royalties">UNISYS and GIF royalties</A><BR>
+	<A href="#Technical notes">Technical notes</A><BR>
+	<A href="#Defining your own fonts">Defining your own fonts</A><BR>
+	<A href="#Including multiple images from your ASP files">Including multiple images from your ASP files</A><BR>
+	<A href="#ASP Client side debugging">ASP Client side debugging</A><BR>
+	<A href="#GIF Files not rendering correctly in non-IE browsers">GIF Files not rendering correctly in non-IE browsers</A><BR>
+	<A href="#Im running the script" >I'm running the script but all I'm getting is a page with 'GIF87a x÷ÿÿÿÿÿÿ, xÿ...' in the top left</A><BR>
+	<A href="#ChiliSoft ASP package">ChiliSoft ASP package</A><BR>
+	<A href="#FileSystemObject">Why doesn't this use the FileSystemObject for file I/O?</A><BR>
+	<A href="#Extra font packs">Extra font packs</A><br>
+	<A href="#Contacting the author">Contacting the author</A><BR>
+	<A href="#Planned modifications">Planned modifications</A><BR>
+	<A href="#Credits">Credits</A><BR>
+	<A href="#Copyright">Copyright</A><BR>
+	<A href="#Pointers in the right direction">Pointers in the right direction</A><BR>
+	<A href="#Version history">Version history</A>
+</P></BLOCKQUOTE>
+<H2><A name="What is ASPCanvas?">What is 
+ASPCanvas?</A>  </H2>
+<P>ASPCanvas is a graphic device&nbsp;class for use on ASP 
+enabled web servers. This class is written in pure ASP and requires no server components or COM objects to be installed on the 
+web server. This class can be used to draw graphics in ASP and display the 
+output on <A href="#non-ie-browsers">any web browser</A>.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="How does it work?">How does it work?</A>   </H2>
+<P>ASPCanvas creates a drawing device in memory where various graphical 
+functions can take place, such as defining colour palettes, drawing lines and 
+rendering text. Once the canvas is ready to be sent from the web server to the 
+web client, ASPCanvas creates a GIF file and sends it to the ASP response 
+object.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name=Requirements>Requirements</A></H2>
+<P>You will require a web server which supports ASP, with 
+version 5.0 or higher of Microsofts VBScript library. NOTE: This class will 
+<STRONG>NOT</STRONG>          
+             work on ChiliSoft's ASP 
+package. <A href="#chilisoft">Please see notes</A>.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Installation instructions">Installation 
+instructions</A> </H2>
+<P>Install "canvas.asp" and "font.asp" to a folder on the ASP enabled web 
+server. The folder must have the correct permissions to run ASP pages.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name=Usage>Usage</A></H2>
+<P>To create a simple canvas, simply use the code below:</P><PRE>Dim objCanvas</PRE><PRE>Set objCanvas = New Canvas</PRE><PRE>... (Various drawing methods)</PRE><PRE>objCanvas.Write</PRE><PRE>Set objCanvas = Nothing</PRE>
+<P>The above code will start a canvas with an initial width of 20 pixels, and an 
+initial height of 20 pixels.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name=Methods>Methods</A></H2>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <H3>Replace <EM>ColourIndex1,ColourIndex2</EM> </H3>
+  <P>Finds and replaces all occurances of ColourIndex1 with ColourIndex2</P>
+  <H3>Copy <EM>X1,Y1,X2,Y2,X3,Y3</EM></H3>
+  <P>Copies a block from X1,Y1 with endpoints at X2,Y2 to the point at X3,Y3</P>
+  <H3>Flood <EM>X,Y</EM></H3>
+  <P>Floodfill an area within the canvas with the current foreground colour 
+  index</P>
+  <H3>Polygon <EM>X Array,Y Array,Join</EM>           
+  </H3>
+  <P>Draws a&nbsp;polygon. Two VBScript arrays are passed 
+  with X and Y coords. The two arrays must be the same size, and there must be 
+  more than one point. Join specifies that the function should close the last part of the polygon 
+  automatically.</P>
+  <H3>Line <EM>X1,Y1,X2,Y2</EM></H3>
+  <P>Draw a line between X1,Y1 and X2,Y2 using the current foreground colour 
+  index</P>
+  <H3>AngleLine <EM>X,Y,Radius,Angle</EM> </H3>
+  <P>Draws a line of a fixed&nbsp;radius at an angle starting at X,Y. Useful for 
+  pie charts. Angles from 0-360.</P>
+  <H3>Rectangle <EM>X1,Y1,X2,Y2</EM></H3>
+  <P>Draw a rectangle between X1,Y1 and X2,Y2 using the current foreground 
+  colour index</P>
+  <H3>Circle <EM>X,Y,Radius</EM></H3>
+  <P>Draw a circle at X,Y using Radius</P>
+  <H3>Ellipse <EM>X,Y,Radius1,Radius2</EM></H3>
+  <P>Draw an ellipse at X,Y using Radius1 (width)&nbsp;and Radius2 (height)</P>
+  <H3>Arc <EM>X,Y,Radius1,Radius2,Angle</EM>         </H3>
+  <P>Draw an arc centered around X,Y with Radius1 and Radius2, following clockwise through Angle.</P>
+  <H3>        Bezier 
+  <EM>X1,Y1,CX1,CY1,CX2,CY2,X2,Y2,Points</EM>         </H3>
+  <P>Draw a Bezier curve between X1,Y1 and X2,Y2 using 
+  control points CX1,CY1 and CX2,CY2. Points is the number of points in the line, the more there are, the better the curve.</P>
+  <H3>PieSlice <EM>X,Y,Radius,Start 
+  Angle,Angle,Filled</EM>         </H3>
+  <P>Draw a pie slice with the center of X,Y with Radius 
+  through Angle. Setting Filled to true fills the slice with the current foregound colour index.</P>
+  <H3>DrawVectorTextWE <EM>X,Y,Text,Scale</EM></H3>
+  <P>Draw scaleable text&nbsp;running West-&gt;East to the canvas with the font 
+  set defined in font.asp. The top left of the text starts at X,Y, the text is 
+  scaled from any size, 1 is actual size, 2 is twice the size and so on. 1.5 
+  would be 1.5 times the size etc.</P></BLOCKQUOTE>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <H3>DrawVectorTextNS <EM>X,Y,Text,Scale</EM></H3>
+  <P>Draw scaleable text&nbsp;running North-&gt;South to the canvas with the 
+  font set defined in font.asp. The top left of the text starts at X,Y, the text 
+  is scaled from any size, 1 is actual size, 2 is twice the size and so on. 1.5 
+  would be 1.5 times the size etc.</P>
+  <H3>DrawTextWE <EM>X,Y,Text</EM></H3>
+  <P>Draw text running West-&gt;East&nbsp;to the canvas from the font set 
+  provided in font.asp. The top left of the text starts at X,Y and the text is a 
+  string variable.</P>
+  <H3>DrawTextNS <EM>X,Y,Text</EM></H3>
+  <P>Draw text running North-&gt;South to the canvas from the font set provided 
+  in font.asp. The top left of the text starts at X,Y and the text is a string 
+  variable.</P>
+  <H3>Clear</H3>
+  <P>Clears the canvas using the current 
+  BackgroundColourIndex</P>
+  <H3>Resize <EM>Width,Height,Preserve</EM></H3>
+  <P>Resizes the canvas to a new Width and Height. To keep the existing image 
+  information, send "true" as the preserve parameter, else send "false". NOTE: 
+  preserving the image can be a time intensive task as the class has to make a 
+  duplicate of the existing image within the new canvas sizes.</P>
+  <H3>Write</H3>
+  <P>Send the canvas information to the Response object, rendering the 
+image.</P>
+  <H3>LoadBMP <EM>Filename</EM></H3>
+  <P>Loads a windows bitmap file from disk, requires ADODB 
+  2.5 and higher, <EM><STRONG>does not require the 
+  FileSystemObject</STRONG></EM>           . This 
+  method will destroy any current image settings. <EM>Filename</EM> is the filepath to load from the server 
+  side, ie: C:\InetPub\wwwroot\file.bmp". The bitmap must be uncompressed (no 
+  RLE encoding), it must also be 
+  of 256 colours but only use the first 128.</P>
+  <H3>SaveBMP <EM>Filename</EM></H3>
+  <P>Saves a windows bitmap to disk, requires ADODB 2.5 and 
+  higher, <STRONG><EM>does not require the FileSystemObject</EM></STRONG>          . Also 
+  requires write permissions to the files directory for the IUSR_webservername 
+  user. <EM>Filename</EM> is the filepath 
+  to save to on the server, ie: C:\InetPub\wwwroot\file.bmp". 
+  <STRONG>NOTE:</STRONG> due to the intensive conversion process, this method can take considerable time to 
+  complete.</P>
+  <H3>EncodeBMP</H3>
+  <P>Encodes the current canvas as a bitmap string. Returns an ASCII string.</P>
+  <H3>DecodeBMP <EM>Bitmap Data</EM></H3>
+  <P>Decodes a binary string as a bitmap and reconfigures the canvas. This 
+  method will destroy any current image settings. <EM>Bitmap Data</EM> is an ASCII string loaded from a bitmap 
+  file. 
+  See LoadBMP for the bitmap format restrictions.</P>
+  <H3>WebSafePalette</H3>
+  <P>Resets the colour palette to the standard 216 web safe 
+  colours. These colours contain RGB combinations of the numbers 0xFF, 0xCC, 
+  0x99, 0x66, 0x33 and 0x00. Colour index 0 is 0xFFFFFF (White), colour index 216 is 0x000000 (black).</P>
+  <P align=right><A href="#top">[TOP]</A></P></BLOCKQUOTE>
+<H2><A name=Properties>Properties</A></H2>
+<BLOCKQUOTE dir=ltr style="MARGIN-RIGHT: 0px">
+  <H3>Pixel(<EM>X,Y</EM>)</H3>
+  <P>Sets/retrieves the pixel colour index at X,Y</P>
+  <H3>GlobalColourTable(<EM>Index</EM>)</H3>
+  <P>Array. Sets/retrieves the RGB value at Index. To set, use the 
+  RGB(<EM>red,green,blue</EM>) function in VBScript.</P>
+  <H3>LocalColourTable(<EM>Index</EM>)</H3>
+  <P>Array. Not supported yet.</P>
+  <H3>ForegroundColourIndex</H3>
+  <P>Long. Sets/retrieves the current pen drawing colour index (0-127)</P>
+  <H3>BackgroundColourIndex</H3>
+  <P>Long. Sets/retrieves the current background colour index (0-127)</P>
+  <H3>      TransaparentColourIndex</H3>
+  <P>Long. Sets/retrieves the current transparency colour index (0-127)</P>
+  <H3>      UseTransparency</H3>
+  <P>Boolean. Includes transparency information with the GIF file</P>
+  <H3>      GIF89a</H3>
+  <P>Boolean. Writes a GIF89a format file, needs to be true to include transparency support.</P>
+  <H3>Version</H3>
+  <P>Retrieves the current version of the ASPCanvas object</P>
+  <H3>       ImageData</H3>
+  <P>Returns the GIF image data as an 8 bit string of characters</P>
+  <H3>       TextImageData</H3>
+  <P>Returns the GIF image data as a VBScript 
+  variant/string object. Useful for dumping contents using the FileSystemObject</P>
+  <H3>Width</H3>
+  <P>Long, read-only. Current width of the image.</P>
+  <H3>Height</H3>
+  <P>Long, read-only. Current height of the image.</P>
+  <H3>      Comment</H3>
+  <P>String, 255 characters max. Inserts a comment string 
+  into the GIF data. Requires GIF89a data.</P>
+  <P align=right><A href="#top">[TOP]</A></P></BLOCKQUOTE>
+<H2><A name="Current limitations">Current 
+limitations</A> </H2>
+<P>Practically everyone who has written to me about this 
+product has asked for some kind of compression within the GIF data. This will 
+not be happening any time soon for one clear reason. <EM>VBScript is too 
+slow!</EM> In order to provide a level of compression (LZW compression in this 
+case) the application needs to manipulate data on a bit by bit level. This 
+includes rotating and shifting byte structures. Although these operations are 
+possible in VBScript, they are are not native to the language and are inherantly 
+slow and cumbersome. The bottom line is that adding compression to the code will 
+increase the processing time <U>considerably</U>           
+                 
+         , rendering any form of compression useless 
+in terms of balancing processing time and bandwidth.</P>
+<P>I have also received several requests for adding a form of image resizing. To enable this 
+to effectively be added to the script it requires two processes - colour mapping and bit manipulations. 
+Both functions are possible in VBScript, but both suffer in terms of available processing time in 
+VBScript. This will not be added to ASPCanvas.</P>
+<P>Currently, due to speed restrictions, ASPCanvas only supports 128 colour GIF 
+files (this is because it is faster to write 8 bits per pixel, or 7 bits for 
+colour and 1 bit for a clearcode)</P>
+<P>Please bear in mind that too many graphical operations will slow the image 
+rendering, especially resizing the canvas and preserving the existing image. 
+Large images do take a while to be rendered to a GIF file. Hopefully, as version 
+numbers increase, this code will become more efficient!</P>
+<P><EM>Previously, this code was encoded using the MS script 
+encoder. This release of the software has not been encoded. This version of the 
+software DOES NOT contains any patented UNISYS LZW algorithms. The GIF's 
+produced in this release of the software are effectively uncompressed. If your 
+version of ASPCanvas contains any portion of the LZW compression algorithm it has 
+been added by a third party.</EM>             
+              
+            
+             
+</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Sample code">Sample code</A> </H2>
+<P>The following code creates a canvas, and draws a few 
+things (<EM>please be careful with the copy and paste functions from your 
+browser to your editing program, sometimes line breaks can go a little stray 
+during translation causing unforseen problems!</EM>          ):</P><PRE>&lt;!--#include file="canvas.asp"--&gt;<BR>&lt;%<BR>Dim objCanvas<BR>Dim lLastY,lCurrentY<BR><BR><BR><BR><BR><BR><BR>Dim iTemp</PRE><PRE>Set objCanvas = New Canvas</PRE><PRE>objCanvas.GlobalColourTable(0) = RGB(255,255,255) ' White<BR>objCanvas.GlobalColourTable(1) = RGB(0,0,0) ' Black<BR>objCanvas.GlobalColourTable(2) = RGB(255,0,0) ' Red<BR>objCanvas.GlobalColourTable(3) = RGB(0,255,0) ' Green<BR>objCanvas.GlobalColourTable(4) = RGB(0,0,255) ' Blue</PRE><PRE>objCanvas.Resize 160,120,false ' Resize without preserving the image</PRE><PRE>lLastY = 0</PRE><PRE>Randomize Time</PRE><PRE>objCanvas.ForegroundColourIndex = 2 ' Set the pen to red</PRE><PRE>For iTemp = 20 To 160 Step 10 ' Draw random lines to simulate a graph<BR>	lCurrentY = Int(Rnd * 100)<BR>	objCanvas.Line iTemp - 10,110 - lLastY,iTemp,110 - lCurrentY<BR>	lLastY = lCurrentY<BR><BR>Next</PRE><PRE>objCanvas.ForegroundColourIndex = 1 ' Set the pen to black</PRE><PRE>objCanvas.Line 10,1,10,110 ' Draw the graph axis<BR>objCanvas.Line 10,110,160,110</PRE><PRE>For iTemp = 20 To 160 Step 10 ' Draw the horizontal measures<BR>	objCanvas.Line iTemp,110,iTemp,108<BR>Next</PRE><PRE>For iTemp = 10 To 110 Step 10 ' Draw the vertical measures<BR>	objCanvas.Line 10,iTemp,12,iTemp<BR>Next</PRE><PRE>objCanvas.DrawTextWE 1,115,"Time" ' Annotate the axis<BR>objCanvas.DrawTextNS 1,1,"Volume"</PRE><PRE>objCanvas.Ellipse 100,100,30,20 ' Draw an ellipse</PRE><PRE>objCanvas.Circle 50,50,10 ' Draw a circle</PRE><PRE>objCanvas.Write ' Write the image to the browser</PRE><PRE>%&gt;</PRE>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="How to include the image within HTML">How to 
+include the image within HTML</A> </H2><P>Including the generated images within an HTML page is 
+quite simple, it requires two files, one with the ASPCanvas code such as listed 
+in the section directly above, and another page with the HTML code for the image 
+to be placed in. The ASPCanvas page is then included using the HTML &lt;IMG&gt; 
+tag. An example which uses the code above would be:</P><PRE>&lt;HTML&gt;<BR>&lt;HEAD&gt;<BR>&lt;TITLE&gt;Example ASPCanvas Page&lt;/TITLE&gt;<BR>&lt;/HEAD&gt;<BR>&lt;BODY&gt;<BR>&lt;TABLE WIDTH=100% BORDER=1&gt;<BR>	&lt;TR&gt;<BR>		&lt;TD&gt;Cell 1&lt;/TD&gt;<BR>		&lt;TD&gt;&lt;IMG SRC="canvas_code.asp"&gt;&lt;/TD&gt;<BR>		&lt;TD&gt;Cell 3&lt;/TD&gt;<BR>	&lt;/TR&gt;<BR>&lt;/TABLE&gt;<BR>&lt;/BODY&gt;<BR>&lt;/HTML&gt;</PRE><P>In this example, the browser will use the image 
+generated by canvas_code.asp and include it into the table. The browser can tell 
+the type of file from the data generated by the ASP code and will render the 
+image. ASPCanvas actually generates uncompressed GIF files through it's code on 
+the fly, and the browser treats the files as GIF's.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="UNISYS and GIF royalties">UNISYS and GIF 
+royalties</A>   </H2>
+<P>ASPCanvas currently only supports uncompressed GIF's (that is, the GIF's 
+structure is created without the use of the LZW compression algorithm which is 
+patented by UNISYS until 2003). See earlier in this document for reasons why
+LZW compression will not be implemented. As this code stands, it is not necessary to pay 
+any royalties to UNISYS if you plan to use this in your web implementation.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Technical notes">Technical notes</A> </H2>
+<P>The following technical information relates to ASPCanvas</P>
+<P>GIF output type: GIF87a, non-interlaced</P>
+<P>Maximum canvas size: 65535 pixels square</P>
+<P>Line drawing method: Bresenham point to point (no mid point problems)</P>
+<P>Elliptical drawing method: Bresenham (symmetrical, no mid point problems)</P>
+<P>Flood fill method: 4 point NSEW fill, non-recursive</P>
+<P>Text type: Bitmap and vector fonts</P>
+<P>Boundaries: The upper left of the image is (1,1)</P>
+<P>File I/O: Uses ADO's Stream object to load and save bitmaps.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Defining your own fonts">Defining your own 
+fonts</A>   </H2>
+<P>The font.asp file contains the information needed to render bitmap and vector fonts to the 
+canvas. The standard font pack which accompanies this release contains definitions 
+for all characters in the standard ASCII character set from numbers 32 
+to 126 inclusive. The standard bitmap font size in this pack is defined on a 5x5 
+grid, but can be expanded by adjusting the font information if need be.</P>
+<P>ASPCanvas needs a dictionary object called "Font" to be declared, this 
+contains keys to each letter in the ASCII set, which in turn contains an array 
+of strings with the font information. The declaration of the standard font pack 
+shows the following code:</P><PRE>Dim Font<BR>Dim Letter(5)</PRE><PRE>Set Font = Server.CreateObject("Scripting.Dictionary")</PRE><PRE>Letter(0) = "01100"<BR>Letter(1) = "10010"<BR>Letter(2) = "10010"<BR>Letter(3) = "11110"<BR>Letter(4) = "10010"</PRE><PRE>Font.Add "A",Letter</PRE>
+<P>To increase the height of the font pack, change the initial dimensions of the 
+Letter array and add the extra lines to the letter definition. To increase the 
+width, simply add the extra 0's to the arrays strings. Both upper and lower case 
+letters can be added in this way, as the dictionary object is case sensitive 
+with its keys.</P>
+<P>Also note that the fonts can support up to 9 colours, the standard font pack 
+will utilise colour index 1. By inserting numbers from 1-9, the rendering engine 
+will use the corresponding index from the GlobalColourTable array.</P>
+<P>Vector fonts are supported in version 1.0.3 of 
+ASPCanvas, and can be changed from the same font.asp file. It is similar in many 
+respects to the bitmap fonts from above, but instead of defining a flat bitmap 
+for each character, it uses points to draw lines on the canvas to form a 
+character. To define a vector font set of your own is relatively simple as with 
+the bitmap fonts, you need a dictionary of vector characters containing an array 
+of values. Vector fonts can be of any size and width, the width of each 
+character is worked out by the code when a character is drawn onto the screen. The font pack 
+which comes with this version is designed around the existing 5x5 bitmap font. 
+The declaration of the vector fonts are as follows:</P>
+<CODE>
+Dim VFont<BR>
+Dim VLetter()<BR>
+<BR>
+Set VFont =
+  
+   Server.CreateObject("Scripting.Dictionary")<BR>
+ReDim VLetter(8,3)<BR>
+<BR>
+VLetter(0,0) = 1 : VLetter(0,1) = 5 : VLetter(0,2) = 1<BR>
+VLetter(1,0) = 1 : VLetter(1,1) = 2 : VLetter(1,2) = 1<BR>
+VLetter(2,0) = 2 : VLetter(2,1) = 1 : VLetter(2,2) = 1<BR>
+VLetter(3,0) = 3 : VLetter(3,1) = 1 : VLetter(3,2) = 1<BR>
+VLetter(4,0) = 4 : VLetter(4,1) = 2 : VLetter(4,2) = 1<BR>
+VLetter(5,0) = 4 : VLetter(5,1) = 5 : VLetter(5,2) = 1<BR>
+VLetter(6,0) = 1 : VLetter(6,1) = 4 : VLetter(6,2) = 0<BR>
+VLetter(7,0) = 4 : VLetter(7,1) = 4 : VLetter(7,2) = 1<BR>
+VFont.Add "A",VLetter</CODE>
+<P>This example is taken from the font pack and defines the 
+letter "A" (ASCII 65). VFont is a dictionary object which holds definitions for 
+each character, VLetter is used to build an array of values for each point. VLetter is 
+re-dimensioned for each character in accordance to the number of lines necessary to 
+build a character, some characters require more, some less.</P>
+<P>The first dimension in the array is the line number and 
+defines the order in which the lines are drawn, the second dimension in the 
+array contains the X, Y and "Pen down" value for the point. In the first line, the X position is 0, the Y position is 5 and 
+the Pen is down from the last point to this current point (as 
+this is the first point, nothing is actually drawn).</P>
+<P>You will notice that the 7th line (the line starting 
+with (6,0)) that the pen value is 0, which means that the pen is up and the line from the last point is not drawn. This is useful if 
+you have characters such as "!" where the current position needs to "jump" 
+from one position to the next without drawing anything.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A 
+name="Including multiple images from your ASP files">Including multiple images 
+from your ASP files</A>      </H2>
+<P>Currently, there is an issue with caching image data from MS IIS servers and 
+MS IE browsers. This consists of the browser assuming that the same filename 
+will contains exactly the same image data if the file is re-used multiple times 
+on a single page. To stop IE from displaying the same image over and over again 
+on the same page, simply add a bogus parameter to the end of the ASP page 
+location. As in the following example:</P><PRE>&lt;imgsrc="test.asp?bogus=1"&gt;&lt;imgsrc="test.asp?bogus=2"&gt;&lt;imgsrc="test.asp?bogus=3"&gt;</PRE>
+<P>This will ensure that the image data is always recalculated.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="ASP Client-side debugging">ASP Client-side 
+debugging</A>  </H2>
+<P>If you have this option turned on in IIS for the web site which ASPCanvas is 
+running on, the integration between IE and IIS will cause IE to see the ASP page 
+as simply text, and will only render the image as text. Ensure that client-side 
+debugging is disabled in the IIS MMC before testing ASPCanvas. You can find this 
+option in Default Web Site-&gt;Properties-&gt;Home-&gt; 
+directory-&gt;Configuration-&gt;App debugging-&gt;Enable ASP client-side script 
+debugging.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A 
+name="GIF Files not rendering correctly in non-IE browsers"><A 
+name=non-ie-browsers>GIF Files not rendering correctly in non-IE browsers</A><A 
+name=non-ie-browsers></A></A>                
+                
+              
+              
+     
+     
+</H2>
+<P> Due to the different ways in which browsers interpret the MIME types and file extensions 
+from a web server, some non-IE browsers will not render the GIF files directly from an 
+ASP file. It is advised that all images produced by ASPCanvas be rendered through 
+a &lt;IMG&gt; tag within an HTML page. Care has been taken to ensure the 
+correct content disposition of the 
+file is sent to the 
+browser.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A 
+name="Im running the script">I'm running the script but all I'm getting is a page 
+with "GIF87a x÷ÿÿÿÿÿÿ, xÿ" in the top left</A>              
+    </H2>
+<P>There is a likely chance that you maybe mixing the ASPCanvas with HTML code. 
+This is quite a common mistake to make and usually appears with code like 
+this:</P><PRE>&lt;!--#include file="canvas.asp"--&gt;<BR>&lt;HTML&gt;<BR>&lt;HEAD&gt;<BR>&lt;TITLE&gt;Test ASPCanvas page that won't work&lt;/TITLE&gt;<BR>&lt;/HEAD&gt;<BR>&lt;BODY&gt;<BR>&lt;%<BR>Dim objCanvas<BR>Set objCanvas = New Canvas</PRE><PRE>... ASPCanvas code</PRE><PRE>objCanvas.Write ' The HTML headers have already been sent, so this will send garbage to the browser</PRE><PRE>%&gt;<BR>&lt;/BODY&gt;<BR>&lt;/HTML&gt;</PRE>
+<P>This simply will not work because GIF code cannot be mixed with HTML. Create 
+two pages, one with the HTML, the other with the ASPCanvas code and then include 
+the ASPCanvas page into your HTML page with the &lt;IMG 
+SRC="canvas_code.asp"&gt; tag.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="ChiliSoft ASP package"><A 
+name=chilisoft>ChiliSoft ASP package</A><A name=chilisoft></A></A>                
+                
+              
+              
+     
+     
+</H2>
+<P>Please note that the ChiliSoft ASP package does not 
+support VBScript classes, and <EM>will not run this script correctly</EM>                
+                
+              
+              
+     
+     
+.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name=FileSystemObject>Why doesn't this use the 
+FileSystemObject for file I/O?</A>  </H2>
+<P>There are two reasons why the FileSystemObject is not 
+used for the file I/O on bitmap data:  </P>
+<UL>
+  <LI>
+<DIV>Some ISP's actually restrict access to the 
+  FileSystemObject on shared servers  </DIV>
+  <LI>
+<DIV>The FileSystemObject will not read binary 
+  data  </DIV></LI></UL>
+<P>It seems odd that some ISP's will restrict access to the 
+object in the first place, but then do not restrict the services available 
+through ADO's Stream object. The reasons I have been given in the past are 
+generally along the lines of stopping people reading other peoples shared areas 
+on a shared server, which is fair enough, so in that case they really should be 
+aware of ADO's ability to do the same thing.  </P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><a name="Extra font packs">Extra font packs</a></H2>
+<P>With thanks to Tony Stefano, ASPCanvas now contains extra font packs. These are located
+in the "extra_fonts" folder. Tony has been kind enough to allow me to include these with
+the current script pack. These are bitmap fonts, with fixed point sizes:</P>
+<ul>
+<li>Courier, 10 point - "courier_10_point.asp" 
+  
+<li>Courier New, 8 point - "courier_new_8_point.asp" 
+  
+<li>Courier New, 10 point - "courier_new_10_point.asp" 
+  
+<li>Lucida, 8 point - "lucida_8_point.asp" 
+  
+<li>Lucida, 10 point - "lucida_10_point.asp"</li>
+</ul>
+<p>To use a font from the list, copy the file from the "extra_fonts" folder into the same
+folder as canvas.asp and adjust the first code line in canvas.asp, replacing "font.asp" to the
+name of the font file you wish to use:</p>
+<p>Please be aware that these are bitmap fonts. Replacing the standard font pack will mean that 
+the vector fonts will be unavailable</p>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Contacting the author">Contacting the 
+author</A>  </H2>
+<P>Chris Read can be contacted using the following e-mail address:</P>
+<P><A href="mailto:mrjolly@bigpond.net.au">mrjolly@bigpond.net.au</A></P>
+<P>             
+             Chris 
+Read is a lead software engineer for a well respected web 
+development company in Australia. He has several years experience in 
+ASP, but has a greater experience (15+ years) in other areas such as medical imaging, 
+operating systems, communications, DSP, data warehousing and also consults companies on their IT needs. 
+He may not be able to answer your questions immediately, but he does care 
+and will help you out if you need assistance (providing you've read the documentation 
+fully!)</P>
+<P><STRONG>If you're looking for someone to hire to do your 
+web work, drop me a line, my rates are reasonable and my services are always 
+professional.</STRONG>             
+              
+           
+          
+               
+              
+              
+              
+</P>
+<P>The primary location of this source and documentation is at the following 
+address:</P>
+<P><A 
+href="http://users.bigpond.net.au/mrjolly/">http://users.bigpond.net.au/mrjolly/</A></P>
+<P>Have fun! I'm always looking for suggestions to improve 
+stuff, tell me what's right, and tell me what's wrong!</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Planned modifications">Planned modifications</A></H2>
+<P>Changes that will take place eventually:</P>  
+<ul>
+<LI>Rotated text support (Vector fonts only though) 
+<LI>Interlace support 
+</ul>
+<P>Nice things, may do if provoked:</P>
+<ul>
+<LI>Load GIF's from file (the LZW decompression algorithm is royalty free)</LI>
+<li>Support for ChiliSoft's ASP package</li>
+</ul>
+<P>Highly unlikely, but you could cross your fingers:&nbsp;</P>
+<ul>
+<LI>Animation support</LI>
+</ul>
+<P>Things that simply won't go into ASPCanvas.</P>
+<ul>
+<li>Compressed GIF's (VBScript is just too darn slow)</li>
+<li>Support for more or less colours</li>
+<li>Other file formats (JPEG, PNG)</LI>
+</ul>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name=Credits>Credits</A>         
+         </H2>
+<UL>
+  <LI>
+<DIV>        Pretty much all of this: Chris Read (<A 
+  href="mailto:mrjolly@bigpond.net.au">mrjolly@bigpond.net.au</A>         
+         )</DIV>
+  <LI>
+<DIV>        With the exception of the vastly improved Arc 
+  functions: Richard Deeming (<A 
+  href="http://www.trinet.co.uk">www.trinet.co.uk</A>         
+         )</DIV>
+  <LI>
+  <DIV>Thanks to Daniel Hasan for his fixes to the Bezier method and the fix for 
+  Netscape browsers</DIV>
+  <LI><DIV>Thanks to Tony Stefano for his excellent extra font packs</DIV>
+<li><DIV>A thank you to all the people who have given me 
+  constructive and often very creative feedback on the         
+         product!</DIV></li></UL>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Copyright">Copyright</A></H2>
+<code><P>                   
+  ASPCanvas Copyright (c) 2002, Chris Read. All rights         
+         reserved.</P>
+<P>        Redistribution and use in source&nbsp;form, with or 
+without modification, are permitted provided that the following 
+conditions are met:</P>
+<OL>
+  <LI>
+<DIV>Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</DIV>
+  <LI>
+<DIV>All advertising materials mentioning features or use of this software must display the following acknowledgement: This product includes software developed by&nbsp;Chris Read with portions contributed by Richard Deeming.</DIV>
+  <LI>
+<DIV>The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.</DIV></LI>
+</OL>
+<P>THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND 
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+WARRANTIES OF MERCHANT ABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE 
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, 
+INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT 
+LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR 
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF 
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE 
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF 
+ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</P>
+</code><P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Pointers in the right direction">Pointers in 
+the right direction</A>                    
+         </H2>
+<P>        Quite a number of people have written to me asking how 
+they can get information on the various image formats such as GIF, JPEG, PNG and 
+so forth. Most of the information about image formats was gained from several 
+years working with a lot of different formats, but more of the technical 
+information was gathered from the following         
+         sites:</P>
+<P><a href="http://www.dcs.ed.ac.uk/home/mxr/gfx/2d-hi.html">The University of Edinburgh 2D image format page</a>&nbsp;- This contains a great 
+deal of information on each image format, including the CompuServe GIF 
+documentation.</P>
+<P><a href="http://kb.indiana.edu/data/adpn.html">The Indiana University Knowledge Base</a>&nbsp;- Good portal for image resources.</P>
+<P>These are great places to start looking at graphic image formats.</P>
+<P align=right><A href="#top">[TOP]</A></P>
+<H2><A name="Version history">Version history</A>         
+         </H2>
+<H3>1.0.5 - Fixes, modifications, additions</H3>
+<ul>
+	<li><div>Added Tony Stefano's extra font packs</div>
+	<li><div>Fixed Clear subroutine to handle BackgroundColourIndex's other than zero</div>
+  <LI>
+  <DIV>Added GIF89a support</DIV>
+  <LI>
+  <DIV>Added transparency support</DIV>
+  <LI>
+  <DIV>Added support for embedded comments</DIV></LI>
+</ul>
+<H3>1.0.4 - Fixes, modifications, additions</H3>
+<UL>
+  <LI><DIV>Added WebSafePalette</DIV><LI>
+<DIV>Fixed content type to display the image correctly in Netscape</DIV>
+  <LI><DIV>Added LoadBMP, SaveBMP, EncodeBMP and DecodeBMP</DIV><LI>
+  <DIV>Vastly improved the GIF creation process, it is now 6-7 times 
+  faster!</DIV>
+  <LI><DIV>Added the missing "=" character to both the bitmap and vector&nbsp;fonts 
+  (!)</DIV></LI></UL>
+<H3>1.0.3 - Fixes, modifications, additions</H3>
+<UL>
+  <LI>   Source code released
+  <LI>   Added Richard Deeming's improved Arc&nbsp;algorithm (<A 
+  href="http://www.trinet.co.uk">www.trinet.co.uk</A>) 
+  <LI>Added a better content disposition so that images are 
+  saved correctly from a browser as GIF's 
+  <LI>        Moved 
+  DegreesToRadians and RadiansToDegrees out of the class 
+  <LI>         
+      Added Replace function 
+  <LI>     Very rough but usable scaleable         
+      vector font support 
+  <LI>     Fixed the PieSlice documentation, it requires an extra 
+     parameter for the start angle     of the 
+  slice</LI></UL>
+<H3>         
+      1.0.2         
+      - Minor fixes, additions</H3>
+<UL>
+  <LI>
+<DIV>         
+      Added PieSlice, Bezier, Arc, AngleLine and&nbsp;Polygon&nbsp;functions</DIV></LI></UL>
+<H3>         
+      1.0.1 - Minor fixes</H3>
+<UL>
+  <LI>
+<DIV>  Fixed boundary problem in Flood(...), it now 
+no longer gives MidB errors when the fill is open</DIV>
+  <LI>
+<DIV>         
+  Added ImageData and TextImageData properties for FileSystemObject support</DIV></LI></UL>
+<H3>         
+     1.0.0 - Initial public release</H3>
+<P align=right><A href="#top">[TOP]</A></P>
+
+</BODY>
+</HTML>
