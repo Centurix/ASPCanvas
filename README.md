@@ -1,0 +1,2 @@
+# ASPCanvas
+ASPCanvas is a graphic device class for use on Classic ASP enabled web servers. This class is written in pure ASP and requires no server components or COM objects to be installed on the  web server. This class can be used to draw graphics in ASP and display the output on any web browser. This is the first version of ASPCanvas released in 2002. There is a later version of ASPCanvas available in a different repository. Decided to put this on Github because people always ask me about it. There's still a lot of Classic ASP out there!
